@@ -40,8 +40,7 @@ describe('Product Routes', () => {
         taxRate: 0.1,
         categoryId: category.id
       };
-
-      const response = await request(app)
+        const response = await request(app)
         .post('/api/products')
         .send(product)
         .expect(201);
@@ -51,12 +50,66 @@ describe('Product Routes', () => {
     });
 
     it('should return error when category does not exist', async () => {
-
+      const product = {
+        name: "S25 Ultra",
+        price: 599.99,
+        description: "Smartphone Samsung",
+        inventory: 10,
+        taxRate: 0.1,
+        categoryId: 100
+      };
+      const response = await request(app)
+        .post('/api/products')
+        .send(product)
+        .expect(400);   
     });
   });
 
   describe('GET /api/products/category/:categoryId', () => {
+    let category1, product1, category2, product2;
+
+    beforeEach(async () => {
+      category1 = await Category.create({ name: 'Dispositivos Moviles' });
+      category2 = await Category.create({ name: 'Electronicos' });
+      product1 = await Product.create({
+        name: "S25 Ultra",
+        price: 599.99,
+        description: "Smartphone Samsung",
+        inventory: 10,
+        taxRate: 0.1,
+        categoryId: category1.id
+      });
+      product2 = await Product.create({
+        name: "Barra de Sonido",
+        price: 59,
+        description: "Barra Sony",
+        inventory: 10,
+        taxRate: 0.1,
+        categoryId: category2.id
+      });
+    });
+
+
     it('should return products for category', async () => {
+ 
+      const response = await request(app)
+      .get('/api/products/category/',category1.id)
+      .expect(200); 
+     
+     // expect(response.body).toHaveProperty('name', 'S24 Ultra');
+    });
+  });
+
+  describe('GET /api/products/categories', () => {
+    it('should return products by multiple categories', async () => {
+
+      const response = await request(app)
+      .get('/api/products/categories')
+      .query({categories: '1,2'})
+      .expect(200); 
+
+      
+      
 
     });
   });
