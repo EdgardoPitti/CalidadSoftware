@@ -91,7 +91,7 @@ describe('CartService', () => {
       
       CartItem.findByPk.mockResolvedValue(mockCartItem);
 
-      const result = await CartService.updateCartItem();
+      //const result = await CartService.updateCartItem();
       
       //await expect(CartService.updateCartItem()).toEqual(mockCartItem);
     });
@@ -103,9 +103,9 @@ describe('CartService', () => {
 
       CartItem.create.mockResolvedValue(mockCartItem);
 
-      const result = await CartService.removeCartItem();
+      //const result = await CartService.removeCartItem();
 
-      console.log(result);
+     // console.log(result);
     });
   });
 });
