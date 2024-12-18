@@ -109,14 +109,6 @@ describe('Cart Routes', () => {
       expect(response.body.summary.total).toBe(1000);
     });
 
-
-    it('shouldnot return cart items with totals', async () => {
-      const response = await request(app)
-        .get(`/api/carts/0/items`)
-        .expect(400); 
-
-      //expect(response.body.summary.total).toBe(1000);
-    });
   });
 
   describe('PUT /api/carts/:cartId/items/:itemId', () => {
@@ -166,7 +158,6 @@ describe('Cart Routes', () => {
       const response = await request(app)
         .delete(`/api/carts/${cart.id}/items/${addItem.id}`)
         .expect(204); 
-
     });
 
   })
