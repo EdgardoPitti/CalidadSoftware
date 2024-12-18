@@ -83,9 +83,9 @@ describe('Product Routes', () => {
   describe('GET /api/products/category/:categoryId', () => {
 
     it('should return products for category', async () => {
- 
+      const categoryId = '1';
       const response = await request(app)
-      .get('/api/products/category/1',)
+      .get(`/api/products/category/${categoryId}`,)
       .expect(200); 
       
       expect(response.body[0]).toHaveProperty('name', 'S25 Ultra');
