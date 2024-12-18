@@ -108,6 +108,15 @@ describe('Cart Routes', () => {
 
       expect(response.body.summary.total).toBe(1000);
     });
+
+
+    it('shouldnot return cart items with totals', async () => {
+      const response = await request(app)
+        .get(`/api/carts/0/items`)
+        .expect(400); 
+
+      //expect(response.body.summary.total).toBe(1000);
+    });
   });
 
   describe('PUT /api/carts/:cartId/items/:itemId', () => {
@@ -125,16 +134,40 @@ describe('Cart Routes', () => {
     });
     
     it('should update quantity to item', async () => {
-
       const cantidad = {
         quantity: 9
       };
       const response = await request(app)
-        .put(`/api/carts/${cart.id}/items/${product.id}`)
+        .put(`/api/carts/${cart.id}/items/${addItem.id}`)
         .send(cantidad)
         .expect(200); 
 
-      //expect(response.body.quantity).toBe(9);
+      expect(response.body.quantity).toBe(9);
     });
+
+   
   });
+  describe('delete /api/carts/:cartId/items/:itemId', () => {
+    let product, cart, addItem;
+    beforeEach(async () => {
+      const category = await Category.create({ name: 'Test Category' });
+      product = await Product.create({
+         name: 'Test Product',
+         price: 100,
+         inventory: 100,
+         categoryId: category.id
+       });
+       cart = await Cart.create({ userId: '1' });
+       addItem = await CartService.addItemToCart(cart.id, product.id, 10);
+    });
+    
+    it('should delete item to cart', async () => {
+
+      const response = await request(app)
+        .delete(`/api/carts/${cart.id}/items/${addItem.id}`)
+        .expect(204); 
+
+    });
+
+  })
 });
