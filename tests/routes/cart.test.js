@@ -37,26 +37,28 @@ describe('Cart Routes', () => {
         .send(cart)
         .expect(201);
         
-     expect(response.body).toHaveProperty('id');
+     expect(response.body).toHaveProperty('id', 1);
     });
   });
 
   describe('POST /api/carts/:cartId/items', () => {
-    //let cart, product;
+    let cart, product;
 
-    // beforeEach(async () => {
-    //   const category = await Category.create({ name: 'Test Category' });
-    //   product = await Product.create({
-    //     name: 'Test Product',
-    //     price: 100,
-    //     inventory: 10,
-    //     categoryId: category.id
-    //   });
-    //   cart = await Cart.create({ userId: '1' });
-    // });
+    beforeEach(async () => {
+      const category = await Category.create({ name: 'Test Category' });
+      product = await Product.create({
+         name: 'Test Product',
+         price: 100,
+         inventory: 10,
+         categoryId: category.id
+       });
+       cart = await Cart.create({ userId: '1' });
+    });
 
     it('should add item to cart', async () => {
-
+      const response = await request(app)
+            .post('/api/products/categories?categories=1,2')
+            .expect(200); 
     });
 
   });

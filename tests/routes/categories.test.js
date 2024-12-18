@@ -36,20 +36,36 @@ describe('Category Routes', () => {
       expect(response.body).toHaveProperty('name', 'Electronics');
       expect(response.body).toHaveProperty('id');
     });
+
+    it('shouldnot create a new category', async () => {
+      const categoryData = {
+        nam: 'Electronics'
+      };
+
+      const response = await request(app)
+        .post('/api/categories')
+        .send(categoryData)
+        .expect(400);
+
+      expect(response.body).toHaveProperty('error', 'notNull Violation: Category.name cannot be null');
+    });
   });
 
   describe('GET /api/categories', () => {
-    // beforeEach(async () => {
-    //   await Category.bulkCreate([
-    //     { name: 'Electronics' },
-    //     { name: 'Books' },
-    //     { name: 'Clothing' }
-    //   ]);
-    // });
+    beforeEach(async () => {
+      await Category.bulkCreate([
+         { name: 'Electronics' },
+         { name: 'Books' },
+         { name: 'Clothing' }
+       ]);
+     });
 
     it('should return all categories', async () => {
       const response = await request(app)
+      .get('/api/categories')
+      .expect(200);
 
+      expect(response.body).not.toBeNull();
     });
   });
 });
