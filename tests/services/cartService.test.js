@@ -8,7 +8,8 @@ jest.mock('../../models/cartItem', () => ({
   findOne: jest.fn(),
   findAll: jest.fn(),
   create: jest.fn(),
-  findByPk: jest.fn()
+  findByPk: jest.fn(),
+  save: jest.fn()
 }));
 
 jest.mock('../../models/product', () => ({
@@ -87,25 +88,27 @@ describe('CartService', () => {
     it('should update cart item quantity when sufficient inventory', async () => {
       
       const mockProduct = { id: 1, inventory: 15, price: 100 };
-      const mockCartItem = { id: 1, quantity: 10, Product: mockProduct};
+      const mockCartItem = { id: 1, quantity: '10', Product: mockProduct, save: jest.fn()};
       
       CartItem.findByPk.mockResolvedValue(mockCartItem);
 
-      //const result = await CartService.updateCartItem();
-      
-      //await expect(CartService.updateCartItem()).toEqual(mockCartItem);
+      const result = await CartService.updateCartItem(1,15);
+
+      await expect(result).toEqual(mockCartItem);
     });
   });
 
   describe('removeCartItem', () => {
     it('should remove cart item successfully', async () => {
-      const mockCartItem = { id: 1, quantity: 10, productId: 2};
+      
+      const mockCartItem = { destroy: jest.fn() };
 
-      CartItem.create.mockResolvedValue(mockCartItem);
+      CartItem.findByPk.mockResolvedValue(mockCartItem);
 
-      //const result = await CartService.removeCartItem();
+      const result = await CartService.removeCartItem(1);
 
-     // console.log(result);
+      expect(CartItem.findByPk).toHaveBeenCalledWith(1);
+      expect(mockCartItem.destroy).toHaveBeenCalled();
     });
   });
 });
